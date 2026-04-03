@@ -78,10 +78,10 @@ differentiation is measurable.
 
 ## After Reviews Are Posted
 
-1. Fill in the evaluation scorecard: `evaluation/scorecard.md`
+1. Fill in the evaluation scorecard: `evaluation/review-protocol-scorecard.md`
 2. Read the Synthesis Agent's prioritized action list
 3. Resolve any `[HUMAN DECISION]` items yourself
-4. Ask a Resolver Agent (or resolve manually) to update the spec
+4. Update the spec to resolve all blocking issues (manually or with a new agent session)
 5. You review the final diff and approve/merge
 
 ## Expected Time Per Run

@@ -17,16 +17,15 @@ that helps the PR author improve the document before implementation begins.
 
 ## Setup
 
-Before reviewing, run these commands to load context:
+Before reviewing, load the diff:
 
 ```
-gh pr view $PR_NUMBER
 gh pr diff $PR_NUMBER
 ```
 
-> Important: Read the diff only — do not read or reference existing PR 
-> comments. Your review must reflect your independent analysis, uninfluenced 
-> by what other reviewers have already said.
+> Important: Use `gh pr diff` only — do not run `gh pr view` or load any
+> existing PR comments. Your review must reflect your independent analysis,
+> uninfluenced by what other reviewers have already said.
 
 ## Comment Format
 
@@ -79,10 +78,10 @@ this structure:
 ## {REVIEWER EMOJI} {Reviewer Name} Review
 
 ### Blocking Issues
-{[BLOCKING] and [AMBIGUITY] comments here}
+{[BLOCKING], [AMBIGUITY], and [FALSE PRECISION] comments here}
 
 ### Suggestions & Nits
-{[SUGGESTION], [FALSE PRECISION], and [NIT] comments here}
+{[SUGGESTION] and [NIT] comments here}
 
 ### Summary
 {2-3 sentence overall assessment: what's strong, what needs work}
