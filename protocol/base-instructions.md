@@ -88,9 +88,8 @@ this structure:
 ```
 
 Post via:
-```
-gh pr review $PR_NUMBER --comment --body "..."
-```
+1. Write your review content to `/tmp/pr-$PR_NUMBER-{reviewer-name}.md` using the Write tool, replacing `{reviewer-name}` with your reviewer identity (e.g. `architect`, `security`)
+2. Run: `gh pr review $PR_NUMBER --comment --body-file /tmp/pr-$PR_NUMBER-{reviewer-name}.md`
 
 **Do not approve or merge the PR. Post comments only.**
 
