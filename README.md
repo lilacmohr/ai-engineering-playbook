@@ -49,7 +49,7 @@ ai-review-protocols/
 │   ├── spec-review.md               ← which personas + order for spec PRs
 │   └── implementation-review.md     ← for code PRs (coming soon)
 ├── evaluation/
-    └── review-protocol-scorecard.md ← measure and improve the protocol
+    └── scorecard-9-reviewer.md       ← measure and improve the protocol
 └── .claude/
     └── commands/
         └── review-pr.md             ← Level 2 slash command (stub)
@@ -132,7 +132,7 @@ Ambiguity at spec time becomes a bug at implementation time.
 
 ## Evaluating the Protocol
 
-After running a review, fill in `evaluation/review-protocol-scorecard.md`. It tracks:
+After running a review, fill in `evaluation/scorecard-9-reviewer.md`. It tracks:
 
 - Per-comment signal quality (label distribution, confidence, actionability)
 - Persona differentiation (did each reviewer find unique issues?)
