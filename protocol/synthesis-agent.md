@@ -33,6 +33,25 @@ Read the diff for context:
 gh pr diff $PR_NUMBER
 ```
 
+## Source Filtering
+
+Before synthesizing, identify and set aside comments that are **not** 
+reviewer findings:
+
+- **Prior synthesis comments** — any comment whose header matches 
+  `## 🎯 Synthesis Review` is a previous synthesis pass. Ignore it entirely. 
+  Do not treat it as a reviewer's findings. Your job is to synthesize from 
+  the raw reviewer comments only, producing a fresh synthesis that supersedes 
+  the prior one.
+- **Duplicate reviewer comments** — if the same reviewer persona posted more 
+  than once (same header emoji and reviewer name), use only the first comment 
+  and ignore subsequent ones.
+- **Non-reviewer comments** — ignore any comments from humans or other 
+  automation that don't follow the structured reviewer format.
+
+The valid source set is: one comment per reviewer persona, using the 
+structured `**[LABEL]**` format. Synthesize only from those.
+
 ## Your Tasks
 
 **1. Identify consensus**
