@@ -1,0 +1,113 @@
+name: "[DECISION] Architecture Decision Required"
+description: "An agent or engineer has hit a decision point that requires human input before implementation continues. Blocks the paired issue."
+title: "[DECISION] "
+labels: ["decision", "blocked"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Decision Required
+        Work on a module is paused because a decision must be made that would
+        produce structurally different code depending on the choice.
+        
+        This issue follows the `DECISION NEEDED` format from `CLAUDE.md §3`.
+        It blocks the linked `[TEST]` or `[IMPL]` issue until resolved.
+        
+        > **Playbook note:** `[DECISION]` issues are the artifact of healthy
+        > agent autonomy boundaries. An agent that never raises decisions is
+        > either working on fully-specified tasks or making architectural choices
+        > silently. An agent that raises too many decisions has insufficient
+        > context. The ratio of `[DECISION]` to `[IMPL]` issues is a signal
+        > of spec quality — track it across projects.
+
+  - type: input
+    id: blocking
+    attributes:
+      label: Blocking Issue
+      description: "The [TEST] or [IMPL] issue that cannot proceed until this is resolved."
+      placeholder: "#43"
+    validations:
+      required: true
+
+  - type: input
+    id: spec_ref
+    attributes:
+      label: Spec Reference
+      description: "The section of SPEC.md that is ambiguous or silent on this decision. Omit if the decision arises from an implementation constraint rather than spec ambiguity."
+      placeholder: "SPEC.md §3.2 — pre-filter cap placement not specified"
+    validations:
+      required: false
+
+  - type: textarea
+    id: decision_statement
+    attributes:
+      label: Decision Statement
+      description: "One sentence describing the decision to be made."
+      placeholder: "Where in the pipeline is the `max_articles_to_summarize` cap (30) applied, and which articles are dropped when the cap is hit?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: options
+    attributes:
+      label: Options
+      description: "2-3 options with concrete consequences for each. Follow the CLAUDE.md format."
+      placeholder: |
+        **Option A: Cap applied after PreFilter, drop by recency (newest kept)**
+        - Consequence: Oldest articles always dropped regardless of score
+        - Implication: PreFilter output must be sorted by date before capping
+        - Code impact: One sort + slice in pipeline.py
+
+        **Option B: Cap applied after PreFilter, drop randomly**  
+        - Consequence: Non-deterministic — same run produces different results
+        - Implication: Harder to debug, harder to test
+        - Code impact: random.sample() in pipeline.py
+
+        **Option C: No cap at PreFilter — cap applied after Pass 1 scoring, drop by lowest score**
+        - Consequence: More LLM calls (up to full PreFilter output), higher cost
+        - Implication: Highest quality selection; aligns with "score cheaply, then invest"
+        - Code impact: Slice in pipeline.py after Summarizer, config key moves semantically
+    validations:
+      required: true
+
+  - type: textarea
+    id: recommendation
+    attributes:
+      label: Agent/Author Recommendation
+      description: "Which option do you recommend and why? Owners make the call, but a recommendation accelerates it."
+      placeholder: |
+        Recommend **Option C** — it aligns with the spec's two-phase design philosophy
+        (score cheaply, invest in survivors). The cost difference is bounded: PreFilter
+        already drops aggressively, so Pass 1 input is rarely >50 articles in practice.
+        The quality benefit (scoring before dropping) is unambiguous.
+    validations:
+      required: true
+
+  - type: textarea
+    id: resolution
+    attributes:
+      label: Resolution
+      description: "Fill in when the decision is made. Include who decided and why."
+      placeholder: |
+        **Decision:** Option C
+        **Decided by:** @owner
+        **Date:** [YYYY-MM-DD]
+        **Rationale:** Aligns with two-phase philosophy; cost impact acceptable for MVP.
+        **Spec update needed:** Yes — add cap placement to SPEC.md §4.2 data flow diagram.
+        **CLAUDE.md update needed:** No.
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        **Process:** 
+        1. Owner reviews options and posts resolution in the Resolution field above.
+        2. Check the follow-up actions that apply and complete them before closing:
+           - [ ] Update SPEC.md if the decision changes documented behavior
+           - [ ] Update CLAUDE.md if the decision changes agent conventions or constraints
+           - [ ] Update the blocked issue with a Playbook Note capturing the decision
+        3. Close this issue and unblock the linked issue.

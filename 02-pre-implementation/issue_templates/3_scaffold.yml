@@ -1,0 +1,112 @@
+name: "[SCAFFOLD] Repo Setup"
+description: "Phase 0 scaffolding tasks — repo structure, tooling, CI, agent infrastructure. Not paired with a TEST issue."
+title: "[SCAFFOLD] "
+labels: ["scaffolding", "phase-0"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Scaffolding Tasks
+        These are Phase 0 setup tasks that create the conditions for TDD to work.
+        They are **not** paired with `[TEST]` issues — they produce config files,
+        directory structures, CI workflows, and agent infrastructure, not testable modules.
+        
+        > **Playbook note:** Scaffolding issues are the highest-leverage work in the
+        > pre-implementation phase. A well-scaffolded repo means every subsequent
+        > agent session starts from a consistent, validated baseline. Skipping or
+        > rushing scaffolding is the most common cause of compounding inconsistency
+        > across a multi-agent team.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: "What kind of scaffolding is this?"
+      options:
+        - "Repo structure (directories, placeholder files)"
+        - "Tooling (pyproject.toml, ruff, mypy, uv)"
+        - "CI/CD (GitHub Actions workflow)"
+        - "Agent infrastructure (CLAUDE.md, hooks, slash commands)"
+        - "Test infrastructure (conftest.py, fixtures, mocks)"
+        - "Prompt infrastructure (prompts.py, LLM client)"
+        - "Configuration (config.example.yaml, .env.example)"
+        - "Documentation (README, AGENTS.md)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: deliverables
+    attributes:
+      label: Deliverables
+      description: "Exact files to create or modify. Be specific — an agent will use this list."
+      placeholder: |
+        Create:
+        - pyproject.toml (with uv, ruff, mypy, pytest config)
+        - .python-version (3.12)
+        - Makefile (targets: lint, typecheck, test, test-unit, test-contract, check, run)
+        - .ruff.toml (line length 100, select ALL, ignore list TBD)
+        - mypy.ini (strict mode, per-module overrides for test files)
+        
+        Do not create:
+        - Any files in radar/ (those are Phase 1+)
+        - Any test files (those are [TEST] issues)
+    validations:
+      required: true
+
+  - type: textarea
+    id: spec_ref
+    attributes:
+      label: Spec / CLAUDE.md Reference
+      description: "Where the requirements for this scaffolding come from."
+      placeholder: |
+        SPEC.md §4.5 (approved dependencies)
+        SPEC.md §4.6 (test infrastructure requirements)
+        CLAUDE.md §4 (language & runtime settings)
+        CLAUDE.md §7.5 (required make targets)
+    validations:
+      required: false
+
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints
+      description: "Hard requirements this scaffolding must satisfy."
+      placeholder: |
+        - Python 3.12 (not 3.11 or 3.13)
+        - ruff must replace black + flake8 + isort (do not add those packages)
+        - mypy must run in strict mode by default
+        - `make check` must run lint + typecheck + tests in that order, fail fast
+        - All approved packages from SPEC.md §4.5 must be in pyproject.toml as dependencies
+        - Dev dependencies (pytest, ruff, mypy) must be in [dependency-groups.dev]
+    validations:
+      required: true
+
+  - type: textarea
+    id: done_when
+    attributes:
+      label: Done When
+      description: "Acceptance criteria. Be explicit — scaffolding has no test suite to verify it."
+      placeholder: |
+        - [ ] All files listed in Deliverables exist
+        - [ ] `uv sync` completes without errors
+        - [ ] `make lint` runs and exits 0 on an empty radar/__init__.py
+        - [ ] `make typecheck` runs and exits 0 on an empty radar/__init__.py
+        - [ ] `make test` runs and exits 0 with "no tests collected" (not an error)
+        - [ ] `make check` runs all three in sequence
+        - [ ] pyproject.toml has all approved dependencies from SPEC.md §4.5
+    validations:
+      required: true
+
+  - type: textarea
+    id: playbook_notes
+    attributes:
+      label: Playbook Notes
+      description: "Decisions and learnings from this issue worth capturing for the AI Engineering Playbook. Fill in as you work or after completion — not required at creation time."
+      placeholder: |
+        Decision: Used uv over pip/poetry because...
+        Decision: ruff line length set to 100 rather than 88 because...
+        Learning: mypy strict mode flagged X pattern we hadn't anticipated...
+    validations:
+      required: false

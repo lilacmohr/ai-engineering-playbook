@@ -1,0 +1,170 @@
+name: "[IMPL] Implement Module"
+description: "Implement a module until its paired [TEST] issue's tests go green. Never opened before the test file exists."
+title: "[IMPL] "
+labels: ["implementation", "tdd-green"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## TDD Protocol
+        This issue implements a module. The paired `[TEST]` issue must be **closed** 
+        (tests written and confirmed failing) before this issue is opened.
+        
+        Your goal: make the tests green. Do not write tests here.
+        
+        > **Playbook note:** "Make the tests pass" is a complete and sufficient
+        > specification for this issue. The test file is the contract. If a test is
+        > wrong, that's a conversation — not a reason to change the implementation
+        > to bypass it.
+
+  - type: input
+    id: module
+    attributes:
+      label: Module to Implement
+      description: "File path to create or modify."
+      placeholder: "radar/processing/pre_filter.py"
+    validations:
+      required: true
+
+  - type: input
+    id: test_issue
+    attributes:
+      label: Paired [TEST] Issue
+      description: "The [TEST] issue that must be closed (tests confirmed failing) before this opens."
+      placeholder: "#41"
+    validations:
+      required: true
+
+  - type: input
+    id: test_file
+    attributes:
+      label: Test File
+      description: "The test file to make green."
+      placeholder: "tests/unit/test_pre_filter.py"
+    validations:
+      required: true
+
+  - type: input
+    id: spec_ref
+    attributes:
+      label: Spec Reference
+      description: "Section(s) of SPEC.md that define the required behavior."
+      placeholder: "SPEC.md §3.2 step 6"
+    validations:
+      required: true
+
+  - type: textarea
+    id: pipeline_context
+    attributes:
+      label: Pipeline Context
+      description: "Stage position, input type, output type. Must match SPEC.md §4.2."
+      placeholder: |
+        Stage: Pre-Filter (preprocessing step 4)
+        Input:  list[ExcerptItem]
+        Output: list[ExcerptItem] (filtered subset)
+        Called by: pipeline.py after Phase 2 deduplication
+        Calls:     nothing (pure logic)
+    validations:
+      required: true
+
+  - type: textarea
+    id: public_interface
+    attributes:
+      label: Public Interface
+      description: "The method signature(s) this module must expose. Changing these requires a DECISION NEEDED (see CLAUDE.md §3)."
+      placeholder: |
+        class PreFilter:
+            def filter(
+                self,
+                items: list[ExcerptItem],
+                keywords: list[str],
+            ) -> list[ExcerptItem]:
+                ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: key_behaviors
+    attributes:
+      label: Key Behaviors
+      description: "Behavioral requirements from the spec. This is a summary — the test file is authoritative."
+      placeholder: |
+        From SPEC.md §3.2 step 6:
+        - Case-insensitive substring match against user's `interests` list
+        - Fields searched: title + excerpt (~200 words)
+        - An article passes if ANY keyword from the interests list matches
+        - This is a pre-filter only — LLM Pass 1 is the quality gate, not this step
+    validations:
+      required: true
+
+  - type: textarea
+    id: failure_handling
+    attributes:
+      label: Failure Handling
+      description: "How this module handles failures per SPEC.md §3.7 and CLAUDE.md §6."
+      placeholder: |
+        - Empty input → return [] immediately, no error
+        - No matches → return [], no error, no log (expected case)
+        - Malformed ExcerptItem fields (None title/excerpt) → treat as empty string, log DEBUG
+        - This module has no external I/O — no retry logic needed
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: "Internal imports this module needs. No new packages without a DECISION NEEDED."
+      placeholder: |
+        Internal:
+        - radar/models.py: ExcerptItem
+        - radar/config.py: UserProfile (for interests list)
+        
+        Standard library only — no third-party imports needed.
+    validations:
+      required: true
+
+  - type: textarea
+    id: done_when
+    attributes:
+      label: Done When
+      description: "This issue is closed when ALL of the following are true:"
+      value: |
+        - [ ] `make test-unit` passes — all tests in the paired test file are green
+        - [ ] `make lint` passes — ruff clean, no formatting issues
+        - [ ] `make typecheck` passes — mypy strict, no errors
+        - [ ] All public functions and methods have explicit return type annotations
+        - [ ] All log calls use structured key=value format (see CLAUDE.md §5.3)
+        - [ ] No bare `except` clauses
+        - [ ] Module docstring explains: what stage, input type, output type, key constraint
+        - [ ] No new unreviewed dependencies introduced
+    validations:
+      required: true
+
+  - type: textarea
+    id: explicitly_out_of_scope
+    attributes:
+      label: Explicitly Out of Scope
+      description: "What this implementation must NOT do. Prevents scope creep."
+      placeholder: |
+        - Do not implement LLM scoring logic (that's Summarizer, Pass 1)
+        - Do not fetch article content (that's ExcerptFetcher)
+        - Do not modify the ExcerptItem dataclass
+        - Do not add configuration keys not in the approved config.yaml schema
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        **Agent instructions:**
+        1. Confirm the paired `[TEST]` issue is closed and tests are failing before writing any code.
+        2. Read `CLAUDE.md` and `SPEC.md` at the sections referenced above.
+        3. Run the test file first: `pytest tests/unit/test_pre_filter.py -v` — confirm red.
+        4. Implement the module. Make tests green one at a time.
+        5. Run `make check` (lint + typecheck + full test suite) — must be clean.
+        6. Do not modify the test file. If a test seems wrong, raise a DECISION NEEDED comment on this issue.
+        7. Commit with message: `feat([module]): implement [description] [closes #N]`
