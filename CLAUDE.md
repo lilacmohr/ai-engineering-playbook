@@ -8,7 +8,7 @@ building software with AI agents.
 - `01-spec-review/README.md` — multi-agent spec review protocol
 - `02-setup/README.md` — project setup: briefing doc, hooks, templates, governance
 - `03-delivery-cycle/README.md` — red-green-retro delivery loop
-- `02-setup/protocol/playbook-pre-implementation.md` — full setup protocol
+- `02-setup/protocol/playbook-setup.md` — full setup protocol
 - `02-setup/examples/ai-radar/CLAUDE.md` — reference implementation briefing doc
 
 ## Structure

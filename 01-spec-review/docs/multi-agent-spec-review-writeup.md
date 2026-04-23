@@ -275,7 +275,3 @@ This pattern scales from a personal tool to an engineering org. The personas bec
 - **everything-claude-code:** https://github.com/affaan-m/everything-claude-code — implementation review agents
 - **oh-my-claudecode:** https://github.com/Yeachan-Heo/oh-my-claudecode — multi-agent orchestration
 
----
-
-*First published: April 2026. Nine-persona run data pending — document will be updated.*
-*Framework version: 0.2 (9 personas, unified scorecard)*

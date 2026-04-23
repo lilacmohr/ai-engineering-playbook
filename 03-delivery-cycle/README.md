@@ -147,6 +147,8 @@ recorded in the PR description under "Interface decisions made."
 |---|---|
 | [`review-tdd-red`](skills/review-tdd-red/SKILL.md) | Test PR is open — find missing tests before IMPL |
 | [`review-tdd-green`](skills/review-tdd-green/SKILL.md) | IMPL PR is open — verify correctness and implementation quality |
+| [`retro`](skills/retro/SKILL.md) | IMPL PR is merged — surface what should be encoded before the next ticket |
+| [`verify-tdd-pairs`](skills/verify-tdd-pairs/SKILL.md) | Audit that every TEST ticket has a paired IMPL ticket (repo health check) |
 
 ---
 

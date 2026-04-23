@@ -15,7 +15,7 @@ ticket to completion. The other setup artifacts — hooks, issue templates, bot 
 ```
 02-setup/
 ├── protocol/
-│   └── playbook-pre-implementation.md  ← full setup protocol (start here)
+│   └── playbook-setup.md  ← full setup protocol (start here)
 ├── examples/
 │   └── ai-radar/
 │       ├── CLAUDE.md                   ← reference implementation briefing doc
@@ -33,6 +33,10 @@ ticket to completion. The other setup artifacts — hooks, issue templates, bot 
 │   ├── 4_decision.yml
 │   └── 5_refactor.yml
 └── skills/                             ← Claude Code skills for setup review tasks
+    ├── audit-pre-impl/SKILL.md         ← go/no-go gate before sprint 1
+    ├── review-claudemd/SKILL.md        ← audit the agent briefing document
+    ├── review-hooks/SKILL.md           ← audit the enforcement layer
+    └── review-issue/SKILL.md           ← verify an issue is agent-ready
 ```
 
 ---
@@ -41,7 +45,7 @@ ticket to completion. The other setup artifacts — hooks, issue templates, bot 
 
 **Step 1 — Write the agent briefing document**
 
-Start with the seven questions in `protocol/playbook-pre-implementation.md §2`:
+Start with the seven questions in `protocol/playbook-setup.md §2`:
 
 1. What is this project and what are its highest-priority constraints?
 2. What is the architecture? (Data flow, stage boundaries, key types)
@@ -60,7 +64,7 @@ Copy the hooks from `hooks/` into your project's `.claude/hooks/` directory.
 Hooks are deterministic enforcements; the briefing doc is probabilistic guidance.
 Together they form a reliable quality gate.
 
-See `protocol/playbook-pre-implementation.md §3` for hook types and configuration.
+See `protocol/playbook-setup.md §3` for hook types and configuration.
 
 **Step 3 — Install issue templates**
 
@@ -146,7 +150,7 @@ These two artifacts work differently:
 Use CLAUDE.md for guidance, conventions, and context. Use hooks for enforcement:
 things that must happen every time, regardless of what the agent was thinking.
 
-See `protocol/playbook-pre-implementation.md §3` for the four hook types and when
+See `protocol/playbook-setup.md §3` for the four hook types and when
 to use each.
 
 ---
@@ -168,8 +172,19 @@ from the "new issue" page. That one file enforces read-the-spec-first as a defau
 
 ---
 
+## Skills
+
+| Skill | Use when |
+|---|---|
+| [`audit-pre-impl`](skills/audit-pre-impl/SKILL.md) | End of sprint zero — formal go/no-go gate before feature work begins |
+| [`review-claudemd`](skills/review-claudemd/SKILL.md) | Before opening first ticket, or when CLAUDE.md is modified |
+| [`review-hooks`](skills/review-hooks/SKILL.md) | After adding or changing hooks — verify correctness and completeness |
+| [`review-issue`](skills/review-issue/SKILL.md) | Before assigning any [TEST], [IMPL], [SCAFFOLD], or [DECISION] issue to an agent |
+
+---
+
 ## Full Protocol
 
-`protocol/playbook-pre-implementation.md` covers the complete setup protocol in detail,
+`protocol/playbook-setup.md` covers the complete setup protocol in detail,
 including how to evaluate spec readiness, what each hook does, the scaffolding workflow,
 and how setup artifacts feed back into each other over time.

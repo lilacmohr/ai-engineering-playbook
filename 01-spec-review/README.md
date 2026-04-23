@@ -37,10 +37,19 @@ independent reviewers, each looking through a different lens, surface it.
 │       └── stakeholder-alignment.md
 ├── workflows/
 │   ├── spec-review.md           ← code-spec review: 9 personas + ambiguity auditor
-│   └── framework-spec-review.md ← framework-spec review: 5 personas
+│   ├── framework-spec-review.md ← framework-spec review: 5 personas
+│   └── spec-scorer-workflow.md  ← score a spec before review
+├── skills/
+│   └── score-spec/SKILL.md      ← Claude Code skill for scoring a spec
 ├── evaluation/
-│   └── scorecard-10-reviewer.md ← measure and improve the protocol
+│   ├── scorecard-10-reviewer.md ← scorecard for 10-reviewer runs
+│   ├── scorecard-9-reviewer.md  ← scorecard for 9-reviewer runs
+│   └── spec-scorer-scorecard.md ← scorecard for the spec scorer
+├── docs/
+│   ├── multi-agent-spec-review-writeup.md ← how the protocol works and why
+│   └── nine-reviewer-agents-findings.md   ← example findings from a real run
 └── examples/
+    └── ai-radar-spec-review/    ← end-to-end example from a real project
 ```
 
 ---
@@ -117,10 +126,23 @@ the full protocol.
 
 ## Evaluating the Protocol
 
-After running a review, fill in `evaluation/scorecard-10-reviewer.md`. It tracks
+After running a review, fill in the appropriate scorecard in `evaluation/`. It tracks
 per-comment signal quality, persona differentiation, conflict rate, and Protocol
 Effectiveness Score (PES). Don't skip the scorecard for the first few runs — it's
 what turns this into a learnable workflow.
+
+Use `scorecard-10-reviewer.md` for a full 10-persona run, `scorecard-9-reviewer.md`
+for 9-persona runs, and `spec-scorer-scorecard.md` for the spec scorer.
+
+---
+
+## Background and Examples
+
+`docs/multi-agent-spec-review-writeup.md` explains how the protocol works and the
+design principles behind it — useful when onboarding a team to this workflow.
+
+`examples/ai-radar-spec-review/` contains the full artifact trail from a real spec
+review run: original spec, per-reviewer findings, synthesis, and before/after scores.
 
 ---
 

@@ -1,5 +1,5 @@
 # AI Engineering Playbook
-## Chapter: Pre-Implementation
+## Chapter: Setup
 
 > **Audience:** Engineering leaders, team leads, and senior engineers adopting AI coding
 > agents across the software development lifecycle.
