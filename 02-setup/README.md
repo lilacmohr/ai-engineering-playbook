@@ -32,7 +32,10 @@ ticket to completion. The other setup artifacts — hooks, issue templates, bot 
 │   ├── 3_scaffold.yml
 │   ├── 4_decision.yml
 │   └── 5_refactor.yml
-└── skills/                             ← Claude Code skills for setup review tasks
+└── skills/                             ← Claude Code skills for setup and planning
+    ├── draft-claudemd/SKILL.md         ← draft a CLAUDE.md from the spec
+    ├── breakdown-spec/SKILL.md         ← produce a phased implementation plan
+    ├── draft-tickets/SKILL.md          ← draft [TEST]+[IMPL] tickets for one phase
     ├── audit-pre-impl/SKILL.md         ← go/no-go gate before sprint 1
     ├── review-claudemd/SKILL.md        ← audit the agent briefing document
     ├── review-hooks/SKILL.md           ← audit the enforcement layer
@@ -45,7 +48,8 @@ ticket to completion. The other setup artifacts — hooks, issue templates, bot 
 
 **Step 1 — Write the agent briefing document**
 
-Start with the seven questions in `protocol/playbook-setup.md §2`:
+If you have a spec, run `/draft-claudemd` to generate a first draft. Otherwise,
+start with the seven questions in `protocol/playbook-setup.md §2`:
 
 1. What is this project and what are its highest-priority constraints?
 2. What is the architecture? (Data flow, stage boundaries, key types)
@@ -73,6 +77,13 @@ directory. They encode the TDD protocol — TEST before IMPL, DECISION for spec 
 REFACTOR for structural debt.
 
 Edit the `config.yml` links to point to your project's SPEC.md and CLAUDE.md.
+
+**Step 3.5 — Plan the implementation before opening tickets**
+
+Once setup is complete and `audit-pre-impl` passes, run `/breakdown-spec` to produce
+a phased implementation plan. Then run `/draft-tickets` one phase at a time to generate
+fully filled-in [TEST] and [IMPL] ticket content, ready to review with `review-issue`
+before opening.
 
 **Step 4 — Set up bot account governance**
 
@@ -176,6 +187,9 @@ from the "new issue" page. That one file enforces read-the-spec-first as a defau
 
 | Skill | Use when |
 |---|---|
+| [`draft-claudemd`](skills/draft-claudemd/SKILL.md) | Draft a CLAUDE.md from the project spec and toolchain config |
+| [`breakdown-spec`](skills/breakdown-spec/SKILL.md) | Read the spec and produce a phased implementation plan before ticket drafting begins |
+| [`draft-tickets`](skills/draft-tickets/SKILL.md) | Draft [TEST] and [IMPL] ticket content for one phase of the implementation plan |
 | [`audit-pre-impl`](skills/audit-pre-impl/SKILL.md) | End of sprint zero — formal go/no-go gate before feature work begins |
 | [`review-claudemd`](skills/review-claudemd/SKILL.md) | Before opening first ticket, or when CLAUDE.md is modified |
 | [`review-hooks`](skills/review-hooks/SKILL.md) | After adding or changing hooks — verify correctness and completeness |

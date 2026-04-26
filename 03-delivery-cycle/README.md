@@ -159,10 +159,16 @@ session to generate a formal Decision Record. Add a row to the project's
 
 ---
 
-## Connecting Back to Setup
+## Connecting to Setup
 
-The delivery cycle creates feedback for the setup chapter. Each retro is an opportunity
-to improve the CLAUDE.md, hooks, and issue templates for the next iteration.
+The delivery cycle begins in chapter 02. Before the first `[TEST]` ticket opens:
+
+1. `/breakdown-spec` — produce a phased implementation plan from the spec
+2. `/draft-tickets` — draft [TEST] and [IMPL] ticket content for one phase at a time
+3. `/review-issue` — verify each ticket before opening it
+
+The delivery cycle then creates feedback for the setup chapter. Each retro is an
+opportunity to improve the CLAUDE.md, hooks, and issue templates for the next iteration.
 
 Over time, this means:
 - Fewer `[DECISION]` issues (clearer spec and autonomy boundary)
