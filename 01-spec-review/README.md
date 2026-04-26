@@ -16,7 +16,8 @@ independent reviewers, each looking through a different lens, surface it.
 ├── protocol/
 │   ├── spec-reviewer-base-instructions.md           ← base for code-spec reviewers
 │   ├── framework-spec-reviewer-base-instructions.md ← base for framework-spec reviewers
-│   └── spec-reviews-synthesis-agent.md              ← synthesizes all reviews + Decision Register
+│   ├── spec-reviews-synthesis-agent.md              ← synthesizes all reviews + Decision Register
+│   └── spec-revision-agent.md                       ← applies synthesis findings to the spec
 ├── personas/
 │   ├── code-spec/        ← reviewers for software/code specs (via GitHub PR)
 │   │   ├── architect.md
@@ -99,7 +100,13 @@ protocol/spec-reviews-synthesis-agent.md — Opus, high effort
 ```
 
 **Step 7:** Work from the Synthesis Agent's output. Resolve `[HUMAN DECISION]` items
-yourself. Update the spec. Merge.
+yourself and document your decisions in the PR thread.
+
+**Step 8:** Run the **Spec Revision Agent** to apply all synthesis findings to the spec:
+```
+protocol/spec-revision-agent.md — Opus, high effort
+```
+You review the diff and merge.
 
 ### Isolation matters
 

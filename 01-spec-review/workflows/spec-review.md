@@ -101,9 +101,12 @@ differentiation is measurable.
 
 1. Fill in the evaluation scorecard: `evaluation/scorecard-10-reviewer.md`
 2. Read the Synthesis Agent's prioritized action list
-3. Resolve any `[HUMAN DECISION]` items yourself
-4. Update the spec to resolve all blocking issues (manually or with a new agent session)
-5. You review the final diff and approve/merge
+3. Resolve any `[HUMAN DECISION]` items yourself and document them in the PR thread
+4. Run the **Spec Revision Agent** (`protocol/spec-revision-agent.md`) to apply all findings:
+   - It reads the synthesis comment and your documented decisions
+   - It edits the spec file directly and posts a revision summary comment
+   - Recommended model: Opus, high effort
+5. Review the diff and approve/merge
 
 ## Expected Time Per Run
 
