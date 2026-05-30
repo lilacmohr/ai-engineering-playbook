@@ -12,9 +12,11 @@ body:
         This issue produces a **failing test file**. No implementation code.
         Tests must be red before the paired `[IMPL]` issue is created.
 
-        > **Playbook note:** The test file is the acceptance criteria. It is the
-        > executable specification of "done." If a behavior isn't tested, it isn't
-        > required. Write tests with that weight in mind.
+        > **Playbook note:** The test file is the **executable specification** of "done."
+        > If a behavior isn't tested, it isn't required. Write tests with that weight in mind.
+        > If a `[CRITERIA]` issue exists for this feature, the test file should cover every
+        > user-facing scenario it defines — the criteria capture intent, the tests make it
+        > verifiable.
 
   - type: input
     id: module
@@ -42,6 +44,15 @@ body:
       placeholder: "SPEC.md §3.2 step 6, §3.7 (failure handling)"
     validations:
       required: true
+
+  - type: input
+    id: criteria_issue
+    attributes:
+      label: "[CRITERIA] Issue"
+      description: "Link to the acceptance criteria issue, if one exists. User-facing scenarios defined there must be covered by this test file."
+      placeholder: "#40"
+    validations:
+      required: false
 
   - type: textarea
     id: pipeline_context
@@ -143,6 +154,7 @@ body:
         - [ ] Empty input case is covered
         - [ ] `make lint` passes on the test file itself (no syntax errors, typed fixtures)
         - [ ] Test names are descriptive: `test_pre_filter_passes_on_keyword_in_excerpt`
+        - [ ] If a `[CRITERIA]` issue exists: every user-facing scenario it defines has at least one corresponding test
         - [ ] Any spec ambiguities encountered while writing tests are documented as `[DECISION]` issues — not silently resolved in test code
         - [ ] PR description includes an "Interface decisions made" section listing any interpretive calls, even obvious ones
         - [ ] **If this module parses structured LLM output** (headings, JSON fields, delimiters): at least one regression test per marker that imports the parser constant and asserts its verbatim presence in the prompt template — canned responses in tests bypass the template entirely, so template/parser mismatches are otherwise invisible

@@ -1,0 +1,126 @@
+name: "[ACCEPTANCE-PREP] Pre-Flight Pipeline"
+description: "Run the four-layer automated pre-flight pipeline before human acceptance testing. Opens after [IMPL] merges."
+title: "[ACCEPTANCE-PREP] "
+labels: ["acceptance-testing", "acceptance-prep"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Pre-Flight Pipeline
+        This issue tracks the automated acceptance testing pipeline. By the time
+        this issue closes, a human should be able to open the application for the
+        `[ACCEPTANCE]` session and find judgment calls waiting — not bugs.
+
+        > **Playbook note:** Run the `acceptance-prep` skill to orchestrate all
+        > four pipeline layers. Or run each persona manually in sequence.
+        > See `05-acceptance-testing/README.md` for the full pipeline reference.
+
+  - type: input
+    id: impl_pr
+    attributes:
+      label: "[IMPL] PR"
+      description: "The PR that implemented this feature."
+      placeholder: "#42"
+    validations:
+      required: true
+
+  - type: input
+    id: criteria_issue
+    attributes:
+      label: "[CRITERIA] Issue"
+      description: "Link to the acceptance criteria issue, if one exists."
+      placeholder: "#40"
+    validations:
+      required: false
+
+  - type: input
+    id: data_snapshot
+    attributes:
+      label: Real Data Snapshot
+      description: "Version or date of the sanitized data snapshot used for Layer 3."
+      placeholder: "2026-05-30 / v14"
+    validations:
+      required: false
+
+  - type: textarea
+    id: pipeline_checklist
+    attributes:
+      label: Pipeline Checklist
+      value: |
+        ### Layer 0: Playwright
+        - [ ] Existing Playwright suite passes against current build
+        - [ ] If Layer 0 fails: return ticket to [IMPL] — do not proceed
+
+        ### Layer 1: Demo Agent
+        - [ ] ACCEPTANCE-DEMO.md produced and committed to PR
+        - [ ] All user-facing flows documented
+        - [ ] Three lowest-confidence areas identified
+
+        ### Layer 2: Adversarial Review
+        - [ ] Adversarial reviewer run (fresh session — no shared context with Layer 1)
+        - [ ] [BLOCKING] items: N — linked [BUG] tickets below
+        - [ ] [AMBIGUITY] items: N — carried to synthesis
+        - [ ] [FALSE PRECISION] items: N
+
+        ### Layer 3: Real Data Stress
+        - [ ] Real data stress agent run against snapshot
+        - [ ] [CRITICAL] failures: N — linked [BUG] tickets below
+        - [ ] [DEGRADED] outputs: N — carried to synthesis
+        - [ ] [COSMETIC] findings: N
+
+        ### Layer 4: Synthesis
+        - [ ] Synthesis agent run — human decisions brief produced
+        - [ ] Brief posted below
+    validations:
+      required: true
+
+  - type: textarea
+    id: bug_tickets
+    attributes:
+      label: Bug Tickets Opened
+      description: "List [BUG] tickets opened during the pipeline, with links."
+      placeholder: |
+        - #45 — [BLOCKING] null company name crashes report export
+        - #46 — [CRITICAL] records with timezone offset >12h produce wrong date
+    validations:
+      required: false
+
+  - type: textarea
+    id: synthesis_brief
+    attributes:
+      label: Human Decisions Brief
+      description: "Paste the synthesis agent's output here. This is the agenda for the [ACCEPTANCE] session."
+      placeholder: |
+        ## Human Decisions Brief — [Feature Name]
+
+        ### Decision 1: [Title]
+        Context: ...
+        The question: ...
+        Options: ...
+    validations:
+      required: false
+
+  - type: textarea
+    id: done_when
+    attributes:
+      label: Done When
+      value: |
+        - [ ] Layer 0 (Playwright) passed
+        - [ ] ACCEPTANCE-DEMO.md committed to PR
+        - [ ] Adversarial review complete — all [BLOCKING] items have linked [BUG] tickets
+        - [ ] Real data stress run complete — all [CRITICAL] failures have linked [BUG] tickets
+        - [ ] Synthesis brief posted above
+        - [ ] [ACCEPTANCE] issue is open and linked below
+    validations:
+      required: true
+
+  - type: input
+    id: acceptance_issue
+    attributes:
+      label: Paired [ACCEPTANCE] Issue
+      description: "Link to the [ACCEPTANCE] issue this feeds."
+      placeholder: "#48"
+    validations:
+      required: false

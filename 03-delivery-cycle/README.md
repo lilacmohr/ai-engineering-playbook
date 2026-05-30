@@ -159,6 +159,46 @@ session to generate a formal Decision Record. Add a row to the project's
 
 ---
 
+## Extending the Cycle with Acceptance Testing
+
+For customer-facing features, the delivery cycle extends with two additional phases:
+
+```
+[CRITERIA]         → define acceptance criteria before [TEST] opens
+[TEST]             → write failing tests
+[IMPL]             → make tests pass
+[ACCEPTANCE-PREP]  → automated pre-flight pipeline (four agent layers)
+[ACCEPTANCE]       → human validation, scoped to judgment calls only
+retro              → run the retro skill with acceptance testing as an added category
+```
+
+**[CRITERIA]** is opened before `[TEST]`. It defines user-facing acceptance criteria
+in observable, non-implementation terms. The test suite covers code correctness;
+the criteria define what "done" looks like to a user.
+
+**[ACCEPTANCE-PREP]** opens after the `[IMPL]` PR merges. It runs a Playwright gate
+plus four agent layers before any human opens the application: demo agent →
+adversarial reviewer → real-data stress agent → synthesis agent. If the Playwright
+gate fails, the ticket returns to `[IMPL]` immediately. The output is a brief of
+2–4 judgment calls that require human resolution. Everything systematic — bug hunting,
+edge cases, real-data failures — happens here, not in the human session.
+
+**[ACCEPTANCE]** is the human session. It follows the synthesis brief, not a free
+walkthrough. Fix-now items are handled in session; complex issues become `[BUG]`
+tickets. Playwright tests for newly validated flows are written after this closes.
+
+**Retro** (the `retro` skill) gains a new category: *what did acceptance testing
+surface that an earlier phase should have caught?* Findings feed back into CLAUDE.md,
+spec review, and issue templates.
+
+Not every ticket needs this extension. Apply the `acceptance:required`,
+`acceptance:data-only`, or `acceptance:skip` tag at ticket creation time.
+
+→ See [`05-acceptance-testing/README.md`](../05-acceptance-testing/README.md) for
+the full pipeline reference, persona files, skills, and scorecard.
+
+---
+
 ## Connecting to Setup
 
 The delivery cycle begins in chapter 02. Before the first `[TEST]` ticket opens:

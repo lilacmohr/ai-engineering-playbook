@@ -68,6 +68,25 @@ touching a service boundary, or when onboarding to an unfamiliar system.
 
 ---
 
+### [05 — Acceptance Testing](05-acceptance-testing/)
+
+Intent validation: confirming the built thing matches what a human actually wanted.
+
+Extends the delivery cycle with a four-layer pre-flight pipeline (demo agent,
+adversarial reviewer, real data stress agent, synthesis agent) that runs before any
+human opens the application. By the time a human session begins, blocking bugs are
+ticketed and what remains is a short brief of judgment calls only a human can make.
+
+Includes the `[CRITERIA]` ticket type (define acceptance criteria before tests are
+written), the `[ACCEPTANCE-PREP]` pipeline ticket, issue templates for all three
+new ticket types, and a scorecard for tracking pipeline improvement over time.
+
+→ **Start here** for any `customer-facing` ticket that needs more than tests: a UI
+feature, a customer-visible report, an auth flow, or any feature where "does this
+work?" is not the same question as "is this what we wanted?"
+
+---
+
 ## Where to Start
 
 If you're new to the playbook: **start with 02-Setup**. The spec review and delivery

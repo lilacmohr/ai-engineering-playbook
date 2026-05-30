@@ -1,0 +1,95 @@
+name: "[ACCEPTANCE] Human Acceptance Session"
+description: "Human validation session. Runs after [ACCEPTANCE-PREP] closes. Scoped to judgment calls from the synthesis brief — not bug hunting."
+title: "[ACCEPTANCE] "
+labels: ["acceptance-testing", "acceptance"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Human Acceptance Session
+        By the time this issue opens, the pre-flight pipeline has run.
+        Your job is not discovery — it is decision-making.
+
+        Read the synthesis brief from `[ACCEPTANCE-PREP]` before opening the app.
+        Walk the flows. Answer the decisions. Triage what you find.
+
+        > **Playbook note:** Fix-now items are handled in this session.
+        > Complex issues, architecture questions, and new feature requests
+        > become `[BUG]` tickets linked back to this issue. The session ends
+        > with a closed `[ACCEPTANCE]` issue, not an open-ended conversation.
+
+  - type: input
+    id: acceptance_prep_issue
+    attributes:
+      label: "[ACCEPTANCE-PREP] Issue"
+      description: "The pre-flight pipeline issue this session follows."
+      placeholder: "#47"
+    validations:
+      required: true
+
+  - type: input
+    id: criteria_issue
+    attributes:
+      label: "[CRITERIA] Issue"
+      description: "The acceptance criteria issue, if one exists."
+      placeholder: "#40"
+    validations:
+      required: false
+
+  - type: textarea
+    id: decisions_made
+    attributes:
+      label: Decisions Made
+      description: "For each item in the synthesis brief, record the decision made. This is the audit trail."
+      placeholder: |
+        ### Decision 1: CSV column order
+        **Decision:** Match the on-screen column order, not the database schema order.
+        **Rationale:** Users expect the export to look like the table they see.
+        **Decided by:** @owner — 2026-05-30
+
+        ### Decision 2: Exported filename format
+        **Decision:** `[report-name]-[YYYY-MM-DD].csv`
+        **Rationale:** Unambiguous, sortable, no user configuration needed for MVP.
+        **Decided by:** @owner — 2026-05-30
+    validations:
+      required: false
+
+  - type: textarea
+    id: fix_now
+    attributes:
+      label: Fix-Now Items
+      description: "Items addressed during this session. List what was fixed."
+      placeholder: |
+        - Export button tooltip was missing — copy added
+        - Column headers were lowercase — corrected to title case
+        - Disabled state applied when user has no data
+    validations:
+      required: false
+
+  - type: textarea
+    id: bug_tickets
+    attributes:
+      label: Follow-On Tickets
+      description: "[BUG] or [IMPL] tickets opened from findings in this session."
+      placeholder: |
+        - #52 — exports with >50k rows timeout on free tier (investigate pagination)
+        - #53 — filtered export should note filter criteria in filename (follow-on)
+    validations:
+      required: false
+
+  - type: textarea
+    id: done_when
+    attributes:
+      label: Done When
+      value: |
+        - [ ] All flows in ACCEPTANCE-DEMO.md have been walked
+        - [ ] All synthesis brief decisions are documented above
+        - [ ] Fix-now items are addressed and noted above
+        - [ ] Follow-on items have linked [BUG] tickets
+        - [ ] Playwright tests written or updated for validated flows (`playwright:required`)
+        - [ ] Decisions entered in the project's Decision Register if Level 1 or 2
+        - [ ] Retro run (`retro` skill) with acceptance testing findings as an additional category
+    validations:
+      required: true

@@ -1,0 +1,104 @@
+name: "[CRITERIA] Define Acceptance Criteria"
+description: "Define user-facing acceptance criteria before the [TEST] ticket is opened. Feeds both the test suite and the acceptance testing pre-flight pipeline."
+title: "[CRITERIA] "
+labels: ["criteria", "acceptance-testing"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Acceptance Criteria First
+        This issue defines what "done" looks like from a user's perspective,
+        before any tests are written or any implementation begins.
+
+        > **Playbook note:** The best time to define acceptance criteria is
+        > before the `[TEST]` ticket is opened. Criteria defined upfront let
+        > the test suite include not just unit and integration tests but the
+        > user-facing scenarios the acceptance pre-flight pipeline will later
+        > exercise. Criteria defined after the fact are guesswork.
+
+  - type: input
+    id: feature
+    attributes:
+      label: Feature
+      description: "Short name of the feature or flow being specified."
+      placeholder: "User report export"
+    validations:
+      required: true
+
+  - type: input
+    id: test_issue
+    attributes:
+      label: Paired [TEST] Issue
+      description: "Link to the [TEST] issue this [CRITERIA] feeds. Create it here or add after [CRITERIA] closes."
+      placeholder: "#44"
+    validations:
+      required: false
+
+  - type: textarea
+    id: user_scenarios
+    attributes:
+      label: User-Facing Scenarios
+      description: "List the scenarios a user can exercise. One scenario per line. Each should describe observable behavior from the user's perspective, not implementation behavior."
+      placeholder: |
+        - A user with a completed report can export it as CSV
+        - The exported file contains all rows visible in the on-screen table
+        - A user with no data sees a disabled export button and a tooltip explaining why
+        - A user can export while filters are active; the file reflects the filtered view
+        - Export works on reports with more than 10,000 rows without timeout
+    validations:
+      required: true
+
+  - type: textarea
+    id: judgment_calls
+    attributes:
+      label: Human Judgment Calls
+      description: "What decisions will require human sign-off during [ACCEPTANCE] that tests cannot verify? List them here so they're explicit before implementation begins."
+      placeholder: |
+        - Does the CSV column order match the user's mental model or the database schema order?
+        - What should the exported filename be? (feature name + date? user-configured?)
+        - Should the export include hidden columns or only visible ones?
+    validations:
+      required: true
+
+  - type: textarea
+    id: out_of_scope
+    attributes:
+      label: Explicitly Out of Scope
+      description: "What is NOT part of this feature? Prevent scope creep by stating it here."
+      placeholder: |
+        - PDF export (follow-on ticket)
+        - Scheduled/recurring export
+        - Export of sub-table data (only the top-level table rows)
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_tags
+    attributes:
+      label: Acceptance Testing Tags
+      description: "Which tags apply to this ticket? See 05-acceptance-testing/README.md for the full taxonomy."
+      value: |
+        - [ ] `customer-facing`
+        - [ ] `acceptance:required` — needs [ACCEPTANCE-PREP] + [ACCEPTANCE] tickets
+        - [ ] `acceptance:data-only` — real-data stress run sufficient, no human walkthrough
+        - [ ] `acceptance:skip` — unit + integration tests are the full story
+        - [ ] `playwright:required` — Playwright test must be written after [ACCEPTANCE]
+        - [ ] `playwright:skip`
+    validations:
+      required: true
+
+  - type: textarea
+    id: done_when
+    attributes:
+      label: Done When
+      value: |
+        - [ ] All user-facing scenarios are written in observable, non-implementation terms
+        - [ ] Human judgment calls are listed explicitly
+        - [ ] Out-of-scope items are stated
+        - [ ] Acceptance testing tags are applied
+        - [ ] Paired [TEST] issue is linked or created
+        - [ ] [ACCEPTANCE-PREP] and [ACCEPTANCE] issues are created (as placeholders) if `acceptance:required` — fill in the [IMPL] PR link when [IMPL] merges
+    validations:
+      required: true
