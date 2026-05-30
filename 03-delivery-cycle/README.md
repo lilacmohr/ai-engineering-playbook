@@ -101,6 +101,12 @@ this iteration and update the setup artifacts that encode the lessons.
 | Hook fired incorrectly | `.claude/hooks/` |
 | Structural debt pattern | `[REFACTOR]` issue |
 
+**CLAUDE.md updates are human-authored.** The retro skill surfaces what to change;
+a human writes or approves the edit and commits it. Agents read CLAUDE.md at the
+start of each session — an update committed after a session closes takes effect
+the next time a new session opens against the updated repo. This is intentional:
+mid-sprint rule changes don't silently affect in-flight work.
+
 The retro is where the system learns. Without it, every ticket starts from the same
 baseline. With it, each iteration makes the next one cheaper.
 
@@ -127,10 +133,21 @@ Recommendation: [agent's recommendation and why]
 The human resolves it, updates the spec, and the agent continues. The decision is
 recorded in the PR description under "Interface decisions made."
 
-For decisions that will constrain future options beyond this ticket — a service
-boundary choice, a consistency model, a data contract — run the
-[`capture-decision`](skills/capture-decision/SKILL.md) skill before closing the
-session to generate a formal Decision Record. Add a row to the project's
+**When to promote a [DECISION] issue to a formal Decision Record:**
+
+| Decision type | Where it lives |
+|---|---|
+| Will constrain someone else's options six months from now (service boundary, data contract, consistency model, public API shape) | Run `capture-decision` → formal Decision Record + Decision Register row |
+| Scoped to this feature, does not propagate | PR description → close the `[DECISION]` issue |
+| Implementation rationale (library choice, error handling pattern) | Inline comment or PR description only |
+
+The test: *if a future engineer made the opposite choice without knowing this
+decision existed, would it break something or cause a painful migration?* If yes,
+it needs a record. If no, the PR description is enough.
+
+For Level 1 and Level 2 decisions (the first row above), run
+[`capture-decision`](skills/capture-decision/SKILL.md) before closing the
+session. Add a row to the project's
 [Decision Register](../04-decision-records/templates/decision-register.md).
 
 ---
@@ -187,9 +204,17 @@ edge cases, real-data failures — happens here, not in the human session.
 walkthrough. Fix-now items are handled in session; complex issues become `[BUG]`
 tickets. Playwright tests for newly validated flows are written after this closes.
 
-**Retro** (the `retro` skill) gains a new category: *what did acceptance testing
-surface that an earlier phase should have caught?* Findings feed back into CLAUDE.md,
-spec review, and issue templates.
+**Retro** — there are two retros when the extended cycle runs, with different scopes:
+
+| Retro | Runs after | Scope |
+|---|---|---|
+| Post-`[IMPL]` retro | `[IMPL]` PR merges | Delivery cycle friction: agent decisions, test gaps, hook behavior, spec ambiguities |
+| Post-`[ACCEPTANCE]` retro | `[ACCEPTANCE]` closes | Acceptance testing findings: what the pipeline caught, what it missed, what should have been caught earlier |
+
+Both use the `retro` skill. The post-`[ACCEPTANCE]` retro adds one category:
+*what did acceptance testing surface that an earlier phase should have caught?*
+Findings from this retro feed back into CLAUDE.md, spec review, and issue
+templates — same artifact destinations, different source questions.
 
 Not every ticket needs this extension. Apply the `acceptance:required`,
 `acceptance:data-only`, or `acceptance:skip` tag at ticket creation time.

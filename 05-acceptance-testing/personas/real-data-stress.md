@@ -14,6 +14,22 @@ Prerequisite: Playwright suite passes (Layer 0). Do not run this layer
 against a build that is already failing existing tests.
 
 Recommended model: Sonnet
+
+## What "real data" means
+
+Real data is a sanitized copy of production records — taken from the live
+database with PII removed or pseudonymized (names replaced with tokens,
+emails hashed, phone numbers redacted). It is not the same fixture data
+the tests were developed against.
+
+If a production snapshot is unavailable, use a realistic synthetic dataset
+that mirrors production's distribution and messiness: include null fields,
+long strings, records with missing foreign keys, and date edge cases.
+Uniform fixture data with clean, short values is not a substitute.
+
+Do not log or surface PII in your output. Sanitized records are the input;
+your output report should reference record types and field shapes, not the
+actual values.
 -->
 
 ---

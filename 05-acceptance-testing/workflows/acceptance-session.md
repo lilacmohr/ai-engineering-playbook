@@ -81,8 +81,8 @@ The `[ACCEPTANCE]` issue closes when:
 - [ ] All synthesis brief decisions have been made and documented
 - [ ] Fix-now items have been fixed
 - [ ] Follow-on items have `[BUG]` tickets with links back to this issue
-
-After the issue closes, write or update Playwright tests for any newly validated flows (`playwright:required` — see the [README](../README.md)).
+- [ ] Playwright tests written or `[IMPL]` ticket opened for newly validated flows
+- [ ] Scorecard entry added to `evaluation/acceptance-scorecard.md`
 
 Document the decisions made in the `[ACCEPTANCE]` issue thread. When someone
 asks later why a feature behaved a certain way and then changed, the decision
@@ -100,6 +100,19 @@ Do not write a *new* Playwright test for a flow that hasn't passed `[ACCEPTANCE]
 You would be encoding behavior that hasn't been validated as correct. Existing
 Playwright tests for previously validated flows are unaffected — they run at
 Layer 0 to guard against regression, independent of this cycle.
+
+**How the handoff works:**
+
+| Situation | Action |
+|---|---|
+| Playwright tests are straightforward (happy path for a single validated flow) | Write them in the same session before closing `[ACCEPTANCE]` |
+| Tests are complex or cross-flow (multiple states, auth, data setup) | Open a `[IMPL]` ticket tagged `playwright:required`; link it to this `[ACCEPTANCE]` issue |
+| Flow was validated but behavior may change in a follow-on ticket | Mark `playwright:skip` on the flow; revisit after the follow-on closes |
+
+The ticket body for a `playwright:required` [IMPL] should reference the specific
+flows validated in `[ACCEPTANCE]` and link to the `ACCEPTANCE-DEMO.md` for the
+expected behavior. Do not rely on memory of what the acceptance session found —
+the artifact is the spec for the test.
 
 ---
 

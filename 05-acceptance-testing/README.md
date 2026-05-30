@@ -42,6 +42,33 @@ existing retro with an additional acceptance testing lens applied.
 
 ---
 
+## When to Open [CRITERIA]
+
+Open a `[CRITERIA]` ticket when a feature is tagged `acceptance:required` or
+`acceptance:data-only`. The trigger is simple:
+
+> Does this feature have user-facing behavior that the test suite needs to
+> know about before tests are written?
+
+If yes: open `[CRITERIA]` before `[TEST]`. If no: apply `acceptance:skip` and
+proceed directly to `[TEST]`.
+
+```
+Customer-facing feature?
+  └─ Yes → Does it need a human walkthrough (UI, report, auth flow)?
+              └─ Yes → Set acceptance:required. Open [CRITERIA] now.
+              └─ No  → Customer-facing API or internal pipeline feature?
+                          └─ Yes → Set acceptance:data-only. Open [CRITERIA] now.
+                          └─ No  → Set acceptance:required. Open [CRITERIA] now — spec is underspecified.
+  └─ No  → Set acceptance:skip. Proceed to [TEST].
+```
+
+`[CRITERIA]` must close before `[TEST]` opens. The acceptance criteria it defines
+are what the pre-flight pipeline will later exercise — and what the `[TEST]` ticket
+should cover in its user-facing scenarios.
+
+---
+
 ## When to Skip
 
 The test for whether acceptance testing is warranted: **is there a human-observable
@@ -106,12 +133,12 @@ of each layer and surfaces the synthesis brief for the human session.
 
 ## Issue Taxonomy
 
-| Issue type | Opens when | Closes when |
-|---|---|---|
-| `[CRITERIA]` | Before `[TEST]` | Acceptance criteria are unambiguous and cover user-facing scenarios |
-| `[ACCEPTANCE-PREP]` | After `[IMPL]` PR merges | All pipeline layers complete; synthesis brief produced |
-| `[ACCEPTANCE]` | After `[ACCEPTANCE-PREP]` closes | Judgment calls resolved; fixes done or ticketed |
-| `[BUG]` | Pre-flight or `[ACCEPTANCE]` finds a defect needing `[IMPL]` work | Same as `[IMPL]` — `[BUG]` is a label on a standard `[IMPL]` ticket, not a separate type. Use the `[IMPL]` template; add the `bug` label and a link back to the `[ACCEPTANCE-PREP]` or `[ACCEPTANCE]` issue that found it. |
+| Issue type | Opens when | Closes when | Template |
+|---|---|---|---|
+| `[CRITERIA]` | Before `[TEST]`, when feature is `acceptance:required` or `acceptance:data-only` | Acceptance criteria are unambiguous and cover user-facing scenarios | [`templates/criteria-issue-template.md`](templates/criteria-issue-template.md) |
+| `[ACCEPTANCE-PREP]` | After `[IMPL]` PR merges | All pipeline layers complete; synthesis brief produced | [`templates/acceptance-prep-issue-template.md`](templates/acceptance-prep-issue-template.md) |
+| `[ACCEPTANCE]` | After `[ACCEPTANCE-PREP]` closes | Judgment calls resolved; fixes done or ticketed | [`templates/acceptance-issue-template.md`](templates/acceptance-issue-template.md) |
+| `[BUG]` | Pre-flight or `[ACCEPTANCE]` finds a defect needing `[IMPL]` work | Same as `[IMPL]` — `[BUG]` is a label on a standard `[IMPL]` ticket, not a separate type. Use the `[IMPL]` template; add the `bug` label and a link back to the `[ACCEPTANCE-PREP]` or `[ACCEPTANCE]` issue that found it. | — |
 
 ---
 
@@ -140,13 +167,16 @@ context with the demo agent — isolation is what gives it signal.
 
 ## Evaluation
 
-Track whether the pipeline is improving with
-[`evaluation/acceptance-scorecard.md`](evaluation/acceptance-scorecard.md).
+| Artifact | Purpose |
+|---|---|
+| [`evaluation/acceptance-scorecard.md`](evaluation/acceptance-scorecard.md) | Per-feature tracking template; fill out after each `[ACCEPTANCE]` closes |
+| [`evaluation/agent-calibration.md`](evaluation/agent-calibration.md) | Calibration rubric for each persona — what well-calibrated looks like, signs of over/under-sensitivity, and how to recalibrate |
+| [`evaluation/pipeline-review.md`](evaluation/pipeline-review.md) | Periodic review workflow — converts scorecard signal into concrete changes |
 
-The core question the scorecard answers: *is the proportion of issues that reach
-human `[ACCEPTANCE]` declining over time?* As judgment calls made during
-`[ACCEPTANCE]` get encoded as rules in CLAUDE.md, the pre-flight pipeline catches
-more before the human session. That is the improvement signal.
+The scorecard answers: *is the proportion of issues that reach human `[ACCEPTANCE]`
+declining over time?* The calibration rubric answers: *are the agents finding the
+right things, or are they too noisy or too lenient?* The pipeline review is where
+those signals become action — run it every 5th scorecard entry.
 
 ---
 
